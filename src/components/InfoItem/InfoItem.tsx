@@ -1,3 +1,5 @@
+import React, { useMemo } from "react";
+import classNames from "classnames";
 import styles from "./InfoItem.module.scss";
 
 export interface InfoItemProps {
@@ -8,12 +10,20 @@ export interface InfoItemProps {
 
 export const InfoItem = ({ icon, text, isLink }: InfoItemProps) => {
   const currentText = text || "Not available";
-  let currentHref = "";
-  if (isLink) {
-    currentHref = text && text.startsWith("http") ? text : `https://${text}`;
-  }
+
+  const currentHref = useMemo(() => {
+    if (isLink) {
+      return text && text.startsWith("http") ? text : `https://${text}`;
+    }
+    return "";
+  }, [isLink, text]);
+
+  const itemClasses = classNames(styles.infoItem, {
+    [styles.empty]: !text,
+  });
+
   return (
-    <div className={`${styles.infoItem}${text ? "" : `${styles.empty}`}`}>
+    <div className={itemClasses}>
       {icon}
       <div>
         {isLink && text ? (
