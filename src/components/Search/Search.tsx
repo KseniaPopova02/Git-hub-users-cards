@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import styles from "./Search.module.scss";
 import { ReactComponent as SearchIcon } from "assets/icon-search.svg";
 import { Button } from "components/Button";
@@ -12,6 +13,8 @@ type FormField = {
 };
 
 export const Search = ({ hasError, onSubmit }: SearchProps) => {
+  const [searched, setSearched] = useState(false);
+
   const handleSubmit = (
     event: React.FormEvent<HTMLFormElement & FormField>
   ) => {
@@ -20,6 +23,7 @@ export const Search = ({ hasError, onSubmit }: SearchProps) => {
     if (text.trim()) {
       onSubmit(text);
       event.currentTarget.reset();
+      setSearched(true);
     }
   };
 
@@ -36,7 +40,7 @@ export const Search = ({ hasError, onSubmit }: SearchProps) => {
           name="username"
           placeholder="Search GitHub username..."
         />
-        {hasError && <div className={styles.error}>No result</div>}
+        {searched && hasError && <div className={styles.error}>No result</div>}
         <Button>Search</Button>
       </div>
     </form>
